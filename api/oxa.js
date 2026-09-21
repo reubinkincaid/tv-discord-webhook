@@ -18,7 +18,7 @@ function timingSafeEq(a, b) {
   return diff === 0;
 }
 
-function verify(secret, header, body, toleranceS = 300) {
+async function verify(secret, header, body, toleranceS = 300) {
   if (!header) return false;
   let t = null, v1s = [];
   for (const part of header.split(',')) {
@@ -28,7 +28,7 @@ function verify(secret, header, body, toleranceS = 300) {
   }
   if (!t || !v1s.length) return false;
   if (Math.abs(Date.now() / 1000 - Number(t)) > toleranceS) return false;
-  const expected = hmacHex(secret, `${t}.${body}`);
+  const expected = await hmacHex(secret, `${t}.${body}`);
   return v1s.some(s => timingSafeEq(expected, s));
 }
 
@@ -124,7 +124,7 @@ export default async function handler(request) {
   if (!secret) return new Response('misconfigured', { status: 500 });
 
   const sigHeader = request.headers.get('0xa-signature');
-  if (!verify(secret, sigHeader, raw)) return new Response('bad signature', { status: 401 });
+  if (!await verify(secret, sigHeader, raw)) return new Response('bad signature', { status: 401 });
 
   let env;
   try { env = JSON.parse(raw); } catch { return new Response('bad json', { status: 400 }); }
