@@ -1,6 +1,7 @@
 export const config = { runtime: 'edge' };
 
 const enc = new TextEncoder();
+const OXA_AVATAR = process.env.OXA_AVATAR_URL || 'https://docs.0xarchive.io/mintlify-assets/_mintlify/favicons/0xarchive-e895b8e7/epsl9cg6_-QmFjTh/_generated/favicon/android-chrome-192x192.png';
 
 async function hmacHex(secret, msg) {
   const key = await crypto.subtle.importKey(
@@ -131,13 +132,13 @@ export default async function handler(request) {
 
   if (env.type === 'webhook.test') {
     const testUrl = process.env.DISCORD_WEBHOOK_URL_OXA_TEST || process.env.DISCORD_WEBHOOK_URL_OXA;
-    if (testUrl) await postDiscord(testUrl, { username: '0xArchive', content: '`webhook.test` received and signature verified' });
+    if (testUrl) await postDiscord(testUrl, { username: '0xArchive', avatar_url: OXA_AVATAR, content: '`webhook.test` received and signature verified' });
     return Response.json({ ok: true });
   }
 
   const url = process.env.DISCORD_WEBHOOK_URL_OXA;
   if (!url) return new Response('no discord url', { status: 500 });
 
-  await postDiscord(url, { username: '0xArchive', embeds: [embed(env)] });
+  await postDiscord(url, { username: '0xArchive', avatar_url: OXA_AVATAR, embeds: [embed(env)] });
   return Response.json({ ok: true });
 }
