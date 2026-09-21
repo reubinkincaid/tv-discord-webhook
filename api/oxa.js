@@ -1,7 +1,7 @@
 export const config = { runtime: 'edge' };
 
 const enc = new TextEncoder();
-const OXA_AVATAR = process.env.OXA_AVATAR_URL || 'https://docs.0xarchive.io/mintlify-assets/_mintlify/favicons/0xarchive-e895b8e7/epsl9cg6_-QmFjTh/_generated/favicon/android-chrome-192x192.png';
+const OXA_AVATAR = process.env.OXA_AVATAR_URL || 'https://docs.0xarchive.io/mintlify-assets/_mintlify/favicons/0xarchive-e895b8e7/epsl9cg6_-QmFjTh/_generated/favicon-dark/android-chrome-192x192.png';
 
 async function hmacHex(secret, msg) {
   const key = await crypto.subtle.importKey(
